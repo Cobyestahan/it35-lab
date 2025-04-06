@@ -19,7 +19,8 @@ import {
     IonCardTitle,
     IonAvatar,
 } from '@ionic/react';
-
+import { supabase } from '../utils/supabaseClient';
+import bcrypt from 'bcryptjs';
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -47,11 +48,24 @@ const Register: React.FC = () => {
      const doRegister = async () => {
         setShowVerificationModal(false);
 
+        const {data,error} = await supabase.auth.signUp({
+            email,
+            password,
+        });
+
         if (error){
             alert("Account creation failed:" + error.message);
             return;
         }
 
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password,salt);
+
+        const {error: insertError} = await supabase.from('users').insert([{
+            username,
+            user_email: email,
+            user_password:hashedPassword,
+        }]);
 
         if(insertError){
             alert("Failed to save user data:" + insertError.message);
