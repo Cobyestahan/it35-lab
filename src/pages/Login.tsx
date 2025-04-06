@@ -12,7 +12,7 @@ import {
 } from '@ionic/react';
 import { logoIonic } from 'ionicons/icons';
 import { useState } from 'react';
-
+import { supabase } from '../utils/supabaseClient';
 
 const AlertBox: React.FC<{ message: string; isOpen: boolean; onClose: () => void }> = ({ message, isOpen, onClose }) => {
   return (
@@ -34,7 +34,8 @@ const Login: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-
+  const doLogin = async () => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setAlertMessage(error.message);
@@ -87,13 +88,14 @@ const Login: React.FC = () => {
             type="email"
             placeholder="Enter Email"
             value={email}
-         
+            onIonChange={e => setEmail(e.detail.value!)}
           />
           <IonInput style={{ marginTop:'10px' }}      
             fill="outline"
             type="password"
             placeholder="Password"
-         
+            value={password}
+            onIonChange={e => setPassword(e.detail.value!)}
           >
             <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
           </IonInput>
