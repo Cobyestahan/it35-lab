@@ -73,7 +73,7 @@ import EditProfilePage from './EditProfile';
                         ))}
 
                        {/* Logout Button */}
-                       <IonButton expand="full" onClick={handleLogout}>
+                       <IonButton expand="full" color={'dark'} onClick={handleLogout}>
                             <IonIcon icon={logOutOutline} slot="start"></IonIcon>
                             Logout
                         </IonButton>

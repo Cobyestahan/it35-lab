@@ -10,7 +10,6 @@ import {
   IonToast,
   useIonRouter
 } from '@ionic/react';
-import { logoIonic } from 'ionicons/icons';
 import { useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 
@@ -74,12 +73,12 @@ const Login: React.FC = () => {
           }}
         >
           <IonAvatar style={{ margin: '0 auto', marginBottom: '20px', width: '100px', height: '100px', overflow: 'hidden' }}>
-  <img
-    src="https://media3.giphy.com/media/ReOQkSNRCDkrGTLk5O/giphy.gif"
-    alt="Black Clover Logo"
-    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-  />
-</IonAvatar>
+            <img
+              src="https://media3.giphy.com/media/ReOQkSNRCDkrGTLk5O/giphy.gif"
+              alt="Black Clover Logo"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </IonAvatar>
 
           <h2 style={{ marginBottom: '20px', fontWeight: 'bold' }}>User Login</h2>
 
@@ -87,6 +86,7 @@ const Login: React.FC = () => {
             label="Email"
             labelPlacement="floating"
             fill="outline"
+            color={'dark'}
             type="email"
             placeholder="Enter Email"
             value={email}
@@ -95,15 +95,16 @@ const Login: React.FC = () => {
           <IonInput
             style={{ marginTop: '10px' }}
             fill="outline"
+            color={'dark'}
             type="password"
             placeholder="Password"
             value={password}
             onIonChange={e => setPassword(e.detail.value!)}
           >
-            <IonInputPasswordToggle slot="end" />
+            <IonInputPasswordToggle slot="end" color={'dark'} className="custom-eye-icon" />
           </IonInput>
 
-          <IonButton onClick={doLogin} expand="full" shape="round" style={{ marginTop: '20px' }}>
+          <IonButton onClick={doLogin} expand="full" color={'dark'} shape="round" style={{ marginTop: '20px' }}>
             Login
           </IonButton>
 
@@ -111,6 +112,7 @@ const Login: React.FC = () => {
             routerLink="/it35-lab/register"
             expand="full"
             fill="clear"
+            color={'dark'}
             shape="round"
             style={{ marginTop: '10px' }}
           >
@@ -128,6 +130,8 @@ const Login: React.FC = () => {
           position="top"
           color="primary"
         />
+
+        
       </IonContent>
     </IonPage>
   );
