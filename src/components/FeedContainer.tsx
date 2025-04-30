@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { IonApp, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonLabel, IonModal, IonFooter, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonAlert, IonText, IonAvatar, IonCol, IonGrid, IonRow, IonIcon, IonPopover } from '@ionic/react';
+import { IonApp, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonLabel, IonModal, IonFooter, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonAlert, IonText, IonAvatar, IonCol, IonGrid, IonRow, IonIcon } from '@ionic/react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabaseClient';
-import { colorFill, pencil, trash } from 'ionicons/icons';
+import { pencil, trash } from 'ionicons/icons';
 
 interface Post {
   post_id: string;
@@ -22,7 +22,6 @@ const FeedContainer = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [popoverState, setPopoverState] = useState<{ open: boolean; event: Event | null; postId: string | null }>({ open: false, event: null, postId: null });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -40,10 +39,15 @@ const FeedContainer = () => {
         }
       }
     };
+
     const fetchPosts = async () => {
-      const { data, error } = await supabase.from('posts').select('*').order('post_created_at', { ascending: false });
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .order('post_created_at', { ascending: false }); // Order posts from newest to oldest
       if (!error) setPosts(data as Post[]);
     };
+
     fetchUser();
     fetchPosts();
   }, []);
@@ -68,7 +72,7 @@ const FeedContainer = () => {
     // Insert post with avatar URL
     const { data, error } = await supabase
       .from('posts')
-      .insert([ { post_content: postContent, user_id: user.id, username, avatar_url: avatarUrl } ])
+      .insert([{ post_content: postContent, user_id: user.id, username, avatar_url: avatarUrl }])
       .select('*');
 
     if (!error && data) {
@@ -85,24 +89,26 @@ const FeedContainer = () => {
 
   const startEditingPost = (post: Post) => {
     setEditingPost(post);
-    setPostContent(post.post_content);
-    setIsModalOpen(true);
+    setPostContent(post.post_content); // Set the content for editing
+    setIsModalOpen(true); // Open the modal
   };
 
   const savePost = async () => {
     if (!postContent || !editingPost) return;
+
     const { data, error } = await supabase
       .from('posts')
       .update({ post_content: postContent })
       .match({ post_id: editingPost.post_id })
       .select('*');
+
     if (!error && data) {
       const updatedPost = data[0] as Post;
       setPosts(posts.map(post => (post.post_id === updatedPost.post_id ? updatedPost : post)));
-      setPostContent('');
-      setEditingPost(null);
-      setIsModalOpen(false);
-      setIsAlertOpen(true);
+      setPostContent(''); // Clear the input after saving
+      setEditingPost(null); // Clear the editing state
+      setIsModalOpen(false); // Close the modal
+      setIsAlertOpen(true); // Show success alert
     }
   };
 
@@ -160,7 +166,7 @@ const FeedContainer = () => {
                     <IonCol size="3">
                       <IonButton
                         fill="clear"
-                        onClick={(e) => setPopoverState({ open: true, event: e.nativeEvent, postId: post.post_id })}
+                        onClick={() => startEditingPost(post)} // Open modal for editing
                       >
                         <IonIcon color="secondary" icon={pencil} />
                       </IonButton>

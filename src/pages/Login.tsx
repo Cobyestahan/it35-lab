@@ -53,15 +53,29 @@ const Login: React.FC = () => {
       <IonContent
         fullscreen
         style={{
-          backgroundImage: 'url("https://i.pinimg.com/originals/f8/f8/af/f8f8afe6b746e5775bd3cf6edc100907.gif")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          position: 'relative', // Make sure the content is positioned correctly
         }}
       >
+        {/* Background Image */}
         <div
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.88)',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: 'url("https://staticg.sportskeeda.com/editor/2024/01/a44b4-17064465595803.gif?w=1200")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            zIndex: -1, // Keep the background behind the content
+          }}
+        />
+
+        {/* Login Form */}
+        <div
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.88)', // Semi-transparent background
             borderRadius: '10px',
             padding: '20px',
             width: '90%',
@@ -120,6 +134,7 @@ const Login: React.FC = () => {
           </IonButton>
         </div>
 
+        {/* Alert and Toast */}
         <AlertBox message={alertMessage} isOpen={showAlert} onClose={() => setShowAlert(false)} />
 
         <IonToast
@@ -130,8 +145,6 @@ const Login: React.FC = () => {
           position="top"
           color="primary"
         />
-
-        
       </IonContent>
     </IonPage>
   );
